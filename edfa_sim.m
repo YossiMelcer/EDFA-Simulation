@@ -1,3 +1,4 @@
+function [data] = edfa_sim()
 % General Parameters
 
 h = 6.626e-34; % Planck's contstant
@@ -23,6 +24,15 @@ Gamma = 0.722; % 0.722 assuming 80% core overlap with Gaussian distributed inten
 
 
 alph = 6.5; % Fiber Absorption (dB/m)
-Ntot = ConvAbsDB2N(s.alph,GetErSpectrum(1530)); % Doping concentration 
+Ntot = ConvAbsDB2N(alph,GetErSpectrum(1530)); % Doping concentration 
 
-aseTerm = GetASETerm(GammaS,sig21,lam,h,c,dlam,Ntot); 
+aseTerm = GetASETerm(Gamma,sig21,wl,h,c,dlam,Ntot);
+
+data = aseTerm;
+end
+
+function aseTerm = GetASETerm(GammaS,sig21,wl,h,c,dlam,Ntot)
+
+aseTerm = 2*dlam*GammaS.*sig21.*(h*(c^2)./(wl.^3))*Ntot;
+
+end
